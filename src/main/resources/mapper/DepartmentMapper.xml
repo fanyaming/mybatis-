@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main.java.mapper.DepartmentMapper">
+    <resultMap id="base_dept" type="main.java.domain.Department">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="emps" ofType="main.java.domain.Employee">
+            <id property="id" column="eid"/>
+            <result property="name" column="ename"/>
+        </collection>
+    </resultMap>
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO department (name)VALUES (#{name})
+    </insert>
+    <select id="get" parameterType="long" resultMap="base_dept">
+        SELECT * FROM  department WHERE id = #{id}
+    </select>
+    <select id="list" resultMap="base_dept">
+        SELECT * FROM department
+    </select>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main.java.mapper.PersonMapper">
+    <resultMap id="base" type="Person">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="salary" column="salary"/>
+    </resultMap>
+    <select id="listData" parameterType="PersonQueryObject" resultType="Person">
+  SELECT * FROM person
+  <where>id
+      <if test="name != null">
+          AND name like concat('%',#{name},'%')
+      </if>
+      <if test="email != null">
+          AND email like concat('%',#{email},'%')
+      </if>
+      <if test="minSalary!=null">
+          and  salary>=#{minSalary}
+      </if>
+      <if test="maxSalary!=null">
+          and  salary &lt;= #{maxSalary}
+      </if>
+  </where>
+        limit #{beginIndex},#{pageSize}
+    </select>
+    <select id="totalCount" parameterType="PersonQueryObject" resultType="long">
+        SELECT count(*) FROM person
+        <where>
+            <if test="name != null">
+                AND name like concat('%',#{name},'%')
+            </if>
+            <if test="email != null">
+                AND email like email('%',#{email},'%')
+            </if>
+            <if test="minSalary!=null">
+                and  salary>=#{minSalary}
+            </if>
+            <if test="maxSalary!=null">
+                and  salary &lt;= #{maxSalary}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main.java.mapper.EmployeeMapper">
+    <resultMap id="base_emp" type="main.java.domain.Employee">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="dept" javaType="main.java.domain.Department">
+            <id property="id" column="did"/>
+            <result property="name" column="dname"/>
+        </association>
+     </resultMap>
+
+    <insert id="save" parameterType="main.java.domain.Employee"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO employee (name,dept_id)VALUES (#{name},#{dept.id})
+    </insert>
+    <select id="get" parameterType="long" resultMap="base_emp">
+        SELECT e.id,e.name,e.dept_id,d.id did,d.name dname
+        FROM  employee e
+        INNER JOIN department d
+        ON  e.dept_id = d.id
+        WHERE e.id=#{id}
+    </select>
+    <select id="list" resultMap="base_emp">
+       SELECT e.id,e.name,e.dept_id,d.id did,d.name dname FROM  employee e INNER JOIN department d
+        ON  e.dept_id = d.id
+    </select>
+</mapper>
